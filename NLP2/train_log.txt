@@ -1,0 +1,78 @@
+﻿python : W1021 20:10:40.563000 10688 torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are cur
+rently not supported in Windows or MacOs.
+At line:1 char:333
++ ...  } }; $env:PYTHONIOENCODING="utf-8"; python train.py *> train_log.txt
++                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (W1021 20:10:40....ndows or MacOs.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and
+ faster downloads.
+C:\Users\Hsun\AppData\Roaming\Python\Python314\site-packages\huggingface_hub\file_download.py:149: UserWarning: `huggin
+gface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not suppor
+t them in C:\Users\Hsun\.cache\huggingface\hub\models--Qwen--Qwen2.5-1.5B-Instruct. Caching files will still work but i
+n a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DI
+SABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-
+cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In ord
+er to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-
+device-for-development
+  warnings.warn(message)
+C:\Users\Hsun\AppData\Roaming\Python\Python314\site-packages\huggingface_hub\file_download.py:149: UserWarning: `huggin
+gface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not suppor
+t them in C:\Users\Hsun\.cache\huggingface\hub. Caching files will still work but in a degraded version that might requ
+ire more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment 
+variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In ord
+er to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-
+device-for-development
+  warnings.warn(message)
+載入模型 Qwen/Qwen2.5-1.5B-Instruct（cuda, torch.bfloat16）
+
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]
+Loading weights:   2%|▏         | 6/338 [00:00<00:08, 38.29it/s]
+Loading weights:   3%|▎         | 11/338 [00:00<00:07, 43.32it/s]
+Loading weights:   7%|▋         | 23/338 [00:00<00:04, 73.55it/s]
+Loading weights:   9%|▉         | 32/338 [00:00<00:04, 74.19it/s]
+Loading weights:  12%|█▏        | 40/338 [00:00<00:05, 58.84it/s]
+Loading weights:  14%|█▍        | 47/338 [00:00<00:04, 58.38it/s]
+Loading weights:  16%|█▌        | 54/338 [00:01<00:06, 45.34it/s]
+Loading weights:  19%|█▉        | 65/338 [00:01<00:04, 59.16it/s]
+Loading weights:  24%|██▍       | 81/338 [00:01<00:03, 80.84it/s]
+Loading weights:  27%|██▋       | 91/338 [00:01<00:02, 83.76it/s]
+Loading weights:  30%|██▉       | 101/338 [00:01<00:02, 81.18it/s]
+Loading weights:  33%|███▎      | 110/338 [00:01<00:03, 67.68it/s]
+Loading weights:  36%|███▌      | 121/338 [00:01<00:03, 63.76it/s]
+Loading weights:  39%|███▉      | 133/338 [00:01<00:02, 72.26it/s]
+Loading weights:  43%|████▎     | 146/338 [00:02<00:02, 80.57it/s]
+Loading weights:  46%|████▌     | 155/338 [00:02<00:02, 67.48it/s]
+Loading weights:  48%|████▊     | 163/338 [00:02<00:02, 66.81it/s]
+Loading weights:  51%|█████     | 171/338 [00:02<00:02, 65.38it/s]
+Loading weights:  53%|█████▎    | 178/338 [00:02<00:02, 61.15it/s]
+Loading weights:  55%|█████▍    | 185/338 [00:02<00:02, 58.64it/s]
+Loading weights:  57%|█████▋    | 191/338 [00:03<00:02, 51.24it/s]
+Loading weights:  58%|█████▊    | 197/338 [00:03<00:02, 48.78it/s]
+Loading weights: 100%|██████████| 338/338 [00:03<00:00, 107.36it/s]
+trainable params: 18,464,768 || all params: 1,562,179,072 || trainable%: 1.1820
+訓練資料 54 段、驗證資料 3 段、共 70 steps
+訓練前 eval loss: 2.9842
+epoch 1 step 5/70 loss 2.5554
+epoch 1 step 10/70 loss 2.1472
+== epoch 1 結束，eval loss: 2.0897
+epoch 2 step 15/70 loss 2.0019
+epoch 2 step 20/70 loss 1.4355
+epoch 2 step 25/70 loss 1.4808
+== epoch 2 結束，eval loss: 2.0768
+epoch 3 step 30/70 loss 1.0506
+epoch 3 step 35/70 loss 1.0151
+epoch 3 step 40/70 loss 0.8849
+== epoch 3 結束，eval loss: 2.2181
+epoch 4 step 45/70 loss 0.6658
+epoch 4 step 50/70 loss 0.5235
+epoch 4 step 55/70 loss 0.4238
+== epoch 4 結束，eval loss: 2.5809
+epoch 5 step 60/70 loss 0.2653
+epoch 5 step 65/70 loss 0.5595
+epoch 5 step 70/70 loss 0.4721
+== epoch 5 結束，eval loss: 2.6044
+LoRA adapter 已存到 outputs/lora-tuwei

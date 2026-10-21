@@ -1,0 +1,4 @@
+# LoRA 權重檔較大，不上傳（執行 train.py 可重現）
+outputs/
+
+__pycache__/
