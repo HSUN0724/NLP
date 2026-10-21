@@ -1,7 +1,4 @@
 # 模型檔過大（超過 GitHub 100 MB 單檔上限）
 bert_emotion_model/
 
-# 資料集（來源：Hugging Face Johnson8187/Chinese_Multi-Emotion_Dialogue_Dataset）
-data.csv
-
 __pycache__/
