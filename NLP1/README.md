@@ -18,6 +18,34 @@
 
 ---
 
+## 專案結構
+
+```text
+NLP1/
+├── data.csv                         # 資料集（Chinese_Multi-Emotion_Dialogue_Dataset）
+├── bert_finetune_multiclass.py      # v1：3 epochs
+├── bert_finetune_multiclass_v2.py   # v2：10 epochs
+├── logs/
+│   ├── trainer_state_v1.json        # v1 訓練紀錄
+│   └── train_v2.log                 # v2 訓練紀錄
+├── requirements.txt
+└── README.md
+```
+
+## 執行方式
+
+```bash
+git clone https://github.com/HSUN0724/NLP.git
+cd NLP/NLP1
+pip install -r requirements.txt
+python bert_finetune_multiclass.py      # v1，模型存到 bert_emotion_model/
+python bert_finetune_multiclass_v2.py   # v2，模型存到 bert_emotion_model_v2/
+```
+
+> 需要支援 CUDA 的 PyTorch 才能用 GPU 訓練，請依顯卡到 [pytorch.org](https://pytorch.org/get-started/locally/) 選擇安裝指令。
+
+---
+
 ## 目錄
 
 1. [讀取資料集](#1-讀取資料集)
@@ -252,7 +280,7 @@ import torch
 from transformers import pipeline
 
 sys.stdout.reconfigure(encoding="utf-8")
-model_dir = r"C:\Users\Hsun\Desktop\NLP\bert_emotion_model"
+model_dir = "bert_emotion_model"
 clf = pipeline("text-classification", model=model_dir, tokenizer=model_dir,
                device=0 if torch.cuda.is_available() else -1, top_k=None)
 text = "我昨天夢到有一隻超大蜘蛛在追著我跑！"
@@ -337,7 +365,7 @@ for r in clf([text])[0]:
 | 項目 | v1 | v2 |
 |------|----|----|
 | 程式 | `bert_finetune_multiclass.py` | `bert_finetune_multiclass_v2.py` |
-| 訓練紀錄 | `trainer_state_v1.json` | `train_v2.log` |
+| 訓練紀錄 | `logs/trainer_state_v1.json` | `logs/train_v2.log` |
 | `num_train_epochs` | 3 | 10 |
 | `OUTPUT_DIR` | `./bert_emotion_model` | `./bert_emotion_model_v2` |
 
