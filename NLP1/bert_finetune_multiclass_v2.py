@@ -1,4 +1,6 @@
 # 微調 BERT：多元分類（Chinese_Multi-Emotion_Dialogue_Dataset，8 種情緒語調）
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import torch
@@ -13,13 +15,14 @@ from transformers import (
 )
 
 MODEL_NAME = "bert-base-chinese"
-OUTPUT_DIR = "./bert_emotion_model_v2"
+PROJECT_DIR = Path(__file__).resolve().parent
+OUTPUT_DIR = str(PROJECT_DIR / "bert_emotion_model_v2")
 
 # 1. 讀取資料集
 # 方法一：直接從 Hugging Face 讀取（官方 pandas 範例）
 # df = pd.read_csv("hf://datasets/Johnson8187/Chinese_Multi-Emotion_Dialogue_Dataset/data.csv")
 # 方法二：讀取已下載的 data.csv
-df = pd.read_csv("data.csv")
+df = pd.read_csv(PROJECT_DIR / "data.csv")
 df = df.dropna(subset=["text", "emotion"])
 print(df["emotion"].value_counts())
 
