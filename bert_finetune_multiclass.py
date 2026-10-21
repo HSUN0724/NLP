@@ -13,7 +13,7 @@ from transformers import (
 )
 
 MODEL_NAME = "bert-base-chinese"
-OUTPUT_DIR = "./bert_emotion_model_v2"
+OUTPUT_DIR = "./bert_emotion_model"
 
 # 1. 讀取資料集
 # 方法一：直接從 Hugging Face 讀取（官方 pandas 範例）
@@ -62,7 +62,7 @@ def compute_metrics(eval_pred):
 # 6. 訓練
 args = TrainingArguments(
     output_dir=OUTPUT_DIR,
-    num_train_epochs=10,
+    num_train_epochs=3,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=32,
     learning_rate=2e-5,
