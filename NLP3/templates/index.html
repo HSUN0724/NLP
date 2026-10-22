@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>健康諮詢小幫手</title>
+<style>
+  :root { --main: #1f7a5c; --bg: #f4f7f6; --card: #fff; --line: #dde5e2; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Microsoft JhengHei", "Noto Sans TC", sans-serif; background: var(--bg); color: #222; }
+  header { background: var(--main); color: #fff; padding: 14px 20px; }
+  header h1 { margin: 0; font-size: 1.3rem; }
+  header small { opacity: .85; }
+  main { max-width: 860px; margin: 0 auto; padding: 16px; }
+  #chat { display: flex; flex-direction: column; gap: 12px; min-height: 55vh; }
+  .msg { padding: 12px 14px; border-radius: 10px; line-height: 1.7; white-space: pre-wrap; word-break: break-word; }
+  .user { align-self: flex-end; background: #d8efe6; max-width: 80%; }
+  .bot { align-self: flex-start; background: var(--card); border: 1px solid var(--line); width: 100%; }
+  .sources { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--line); font-size: .9rem; white-space: normal; }
+  .sources b { color: var(--main); }
+  .sources ul { margin: 6px 0 0; padding-left: 20px; }
+  .sources a { color: #155a8a; }
+  .tag { font-size: .8rem; color: #777; }
+  form { position: sticky; bottom: 0; background: var(--bg); padding: 12px 0; }
+  .row { display: flex; gap: 8px; }
+  textarea { flex: 1; resize: vertical; min-height: 52px; padding: 10px; font: inherit; border: 1px solid var(--line); border-radius: 8px; }
+  button { padding: 0 18px; border: 0; border-radius: 8px; background: var(--main); color: #fff; font: inherit; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: wait; }
+  .opts { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: .92rem; }
+  .link-btn { background: none; color: #a33; padding: 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🩺 健康諮詢小幫手</h1>
+  <small>RAG × 健康醫療網新聞｜對話模型 {{ chat_model }}｜向量模型 {{ embed_model }}</small>
+</header>
+<main>
+  <div id="chat"></div>
+  <form id="form">
+    <div class="row">
+      <textarea id="q" placeholder="輸入健康相關問題，Enter 送出，Shift+Enter 換行"></textarea>
+      <button id="send" type="submit">送出</button>
+    </div>
+    <div class="opts">
+      <label><input type="checkbox" id="retrieve" checked> 多輪對話時進行檢索（取消勾選則沿用前次檢索結果，只依對話紀錄回答）</label>
+      <button type="button" class="link-btn" id="reset">清除對話</button>
+    </div>
+  </form>
+</main>
+<script>
+  const chat = document.getElementById("chat");
+  const form = document.getElementById("form");
+  const q = document.getElementById("q");
+  const send = document.getElementById("send");
+  let history = [];
+  let pastSources = [];  // 對話中檢索過的所有新聞（依連結去重）
+
+  function esc(s) {
+    return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+  function md(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>"); }
+
+  function addMsg(cls, html) {
+    const div = document.createElement("div");
+    div.className = "msg " + cls;
+    div.innerHTML = html;
+    chat.appendChild(div);
+    div.scrollIntoView({behavior: "smooth", block: "end"});
+    return div;
+  }
+
+  function sourcesHtml(sources, retrieved) {
+    if (!sources.length) return "";
+    const items = sources.map(s =>
+      `<li>新聞標題：${esc(s.title)}<br>新聞連結：<a href="${esc(s.url)}" target="_blank">${esc(s.url)}</a><br>文章新增時間：${esc(s.published_at || "")}</li>`
+    ).join("");
+    const note = retrieved ? "" : ' <span class="tag">（本輪未重新檢索，列出先前對話檢索到的新聞）</span>';
+    return `<div class="sources"><b>📰 參考新聞</b>${note}<ul>${items}</ul></div>`;
+  }
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const question = q.value.trim();
+    if (!question) return;
+    addMsg("user", esc(question));
+    q.value = "";
+    send.disabled = true;
+    const pending = addMsg("bot", "思考中…");
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          question,
+          history,
+          use_retrieval: document.getElementById("retrieve").checked,
+          past_sources: pastSources,
+        }),
+      });
+      if (!res.ok) throw new Error("伺服器錯誤 " + res.status);
+      const data = await res.json();
+      pending.innerHTML = md(data.answer) + sourcesHtml(data.sources, data.retrieved);
+      history.push({role: "user", content: question}, {role: "assistant", content: data.answer});
+      for (const s of data.sources) {
+        if (!pastSources.some(p => p.url === s.url)) pastSources.push(s);
+      }
+    } catch (err) {
+      pending.textContent = "發生錯誤：" + err.message + "（請確認 Ollama 是否已啟動）";
+    } finally {
+      send.disabled = false;
+      q.focus();
+    }
+  });
+
+  q.addEventListener("keydown", e => {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); }
+  });
+  document.getElementById("reset").onclick = () => { history = []; pastSources = []; chat.innerHTML = ""; };
+</script>
+</body>
+</html>
