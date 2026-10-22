@@ -1,5 +1,8 @@
 # NLP 作業
 
+> 每份作業也有獨立的 repository：
+> [NLP-HW1](https://github.com/HSUN0724/NLP-HW1)｜[NLP-HW2](https://github.com/HSUN0724/NLP-HW2)｜[NLP-HW3](https://github.com/HSUN0724/NLP-HW3)
+
 | 作業 | 主題 | 方法 | 結果 |
 | --- | --- | --- | --- |
 | [NLP1](NLP1/) | 中文多元情緒分類（8 種語調） | 微調 `bert-base-chinese` | 測試集準確率 89.18%（v1，3 epochs） |
